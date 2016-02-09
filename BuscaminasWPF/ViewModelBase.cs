@@ -35,8 +35,18 @@ namespace BuscaminasWPF
                     c.Row = i;
                     c.Column = j;
                     c.Text = "";
+                    c.Mina = false;
                     lstCeldas.Add(c);
                 }
+
+            Random r = new Random();
+            for(int i=0; i< NumMinas; i++)
+            {
+                int x = r.Next(0, lstCeldas.Count);
+                if (lstCeldas[x].Mina)
+                    i--;
+                lstCeldas[x].Mina = true;
+            }
 
             Celdas = lstCeldas;
         }
@@ -52,7 +62,90 @@ namespace BuscaminasWPF
 
         public void MyActionLeftClick(Celda c)
         {
-            c.Text = c.Row +" "+ c.Column;
+            if (c.Mina)
+            {
+                c.Text = "M";
+                MessageBox.Show("Game Over");
+            }
+            else
+            {
+                int n = GetNumMinasAlrededorCelda(c.Row, c.Column);
+                c.Text = n.ToString();
+                if (n == 0)
+                {
+                    DespejarCeldasAlrededor(c.Row, c.Column);
+                }
+            }
+        }
+
+        private void DespejarCeldasAlrededor(int i, int j)
+        {
+            if (i >= 0 && i < numDificultad && j >= 0 && j < numDificultad)
+            {
+                DespejarCeldasAlrededor_Pos(i - 1, j - 1);
+                DespejarCeldasAlrededor_Pos(i - 1, j);
+                DespejarCeldasAlrededor_Pos(i - 1, j + 1);
+                DespejarCeldasAlrededor_Pos(i, j - 1);
+                DespejarCeldasAlrededor_Pos(i, j + 1);
+                DespejarCeldasAlrededor_Pos(i + 1, j - 1);
+                DespejarCeldasAlrededor_Pos(i + 1, j);
+                DespejarCeldasAlrededor_Pos(i + 1, j + 1);
+            }
+        }
+
+        private void DespejarCeldasAlrededor_Pos(int a, int b)
+        {
+            int n1 = GetNumMinasAlrededorCelda(a, b);
+
+            if (a >= 0 && a < numDificultad && b >= 0 && b < numDificultad && (GetCelda(a, b).Text == string.Empty))
+            {
+                GetCelda(a, b).Text = n1.ToString();
+                //dgvMinas[a, b].Value = n1;
+                //dgvMinas[a, b] = new DataGridViewTextBoxCell();
+
+                if (n1 == 0)
+                {
+                    DespejarCeldasAlrededor(a, b);
+                }
+            }
+
+
+        }
+
+        private int GetNumMinasAlrededorCelda(int i, int j)
+        {
+            bool b1 = ExisteMinaEnCelda(i - 1, j - 1);
+            bool b2 = ExisteMinaEnCelda(i - 1, j);
+            bool b3 = ExisteMinaEnCelda(i - 1, j + 1);
+            bool b4 = ExisteMinaEnCelda(i, j - 1);
+            bool b5 = ExisteMinaEnCelda(i, j + 1);
+            bool b6 = ExisteMinaEnCelda(i + 1, j - 1);
+            bool b7 = ExisteMinaEnCelda(i + 1, j);
+            bool b8 = ExisteMinaEnCelda(i + 1, j + 1);
+
+            int n = 0;
+            if (b1) n++;
+            if (b2) n++;
+            if (b3) n++;
+            if (b4) n++;
+            if (b5) n++;
+            if (b6) n++;
+            if (b7) n++;
+            if (b8) n++;
+            return n;
+        }
+
+
+        private bool ExisteMinaEnCelda(int i, int j)
+        {
+            if (i >= 0 && i < numDificultad && j >= 0 && j < numDificultad)
+                return GetCelda(i, j).Mina;
+            return false;
+        }
+
+        private Celda GetCelda(int row, int column)
+        {
+            return celdas.Where(e => e.Row == row && e.Column == column).First();
         }
 
 
@@ -103,6 +196,7 @@ namespace BuscaminasWPF
         int row;
         int column;
         string text;
+        bool mina = false;
 
         public string Text
         {
@@ -122,6 +216,19 @@ namespace BuscaminasWPF
         {
             get { return column; }
             set { column = value; }
+        }
+
+        public bool Mina
+        {
+            get
+            {
+                return mina;
+            }
+
+            set
+            {
+                mina = value;
+            }
         }
 
         public event PropertyChangedEventHandler PropertyChanged;
