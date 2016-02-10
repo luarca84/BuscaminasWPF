@@ -14,6 +14,8 @@ namespace BuscaminasWPF
         string text;
         bool mina = false;
         Visibility showBomb = Visibility.Hidden;
+        Visibility showFlag = Visibility.Hidden;
+        Visibility showQuestion = Visibility.Hidden;
 
         public string Text
         {
@@ -61,6 +63,34 @@ namespace BuscaminasWPF
             {
                 showBomb = value;
                 RaisePropertyChanged("ShowBomb");
+            }
+        }
+
+        public Visibility ShowFlag
+        {
+            get
+            {
+                return showFlag;
+            }
+
+            set
+            {
+                showFlag = value;
+                RaisePropertyChanged("ShowFlag");
+            }
+        }
+
+        public Visibility ShowQuestion
+        {
+            get
+            {
+                return showQuestion;
+            }
+
+            set
+            {
+                showQuestion = value;
+                RaisePropertyChanged("ShowQuestion");
             }
         }
 

@@ -25,9 +25,26 @@
                                         <MouseBinding Gesture="LeftClick" 
                                                       Command="{Binding RelativeSource={RelativeSource AncestorType={x:Type Window}}, Path=DataContext.LeftClickCommand}"
                                                       CommandParameter="{Binding}"></MouseBinding>
+                                        <MouseBinding Gesture="RightClick" 
+                                                      Command="{Binding RelativeSource={RelativeSource AncestorType={x:Type Window}}, Path=DataContext.RightClickCommand}"
+                                                      CommandParameter="{Binding}"></MouseBinding>
                                     </Button.InputBindings>
                                 </Button>
                                 <Image Source="Images/bomb.png" Visibility="{Binding ShowBomb}"></Image>
+                                <Image Source="Images/flag.png" Visibility="{Binding ShowFlag}">
+                                    <Image.InputBindings>
+                                        <MouseBinding Gesture="RightClick" 
+                                                      Command="{Binding RelativeSource={RelativeSource AncestorType={x:Type Window}}, Path=DataContext.RightClickCommand}"
+                                                      CommandParameter="{Binding}"></MouseBinding>
+                                    </Image.InputBindings>
+                                </Image>
+                                <Image Source="Images/question.png" Visibility="{Binding ShowQuestion}">
+                                    <Image.InputBindings>
+                                        <MouseBinding Gesture="RightClick" 
+                                                      Command="{Binding RelativeSource={RelativeSource AncestorType={x:Type Window}}, Path=DataContext.RightClickCommand}"
+                                                      CommandParameter="{Binding}"></MouseBinding>
+                                    </Image.InputBindings>
+                                </Image>
                             </Grid>
                         </Grid>
                 </DataTemplate>

@@ -91,6 +91,32 @@ namespace BuscaminasWPF
             }
         }
 
+        private ICommand _rightClickCommand;
+        public ICommand RightClickCommand
+        {
+            get
+            {
+                return _rightClickCommand ?? (_rightClickCommand = new CommandHandler_Celda((Celda c) => MyActionRightClick(c), true));
+            }
+        }
+
+        public void MyActionRightClick(Celda c)
+        {
+            if (c.ShowFlag == Visibility.Hidden && c.ShowQuestion == Visibility.Hidden)
+            {
+                c.ShowFlag = Visibility.Visible;
+            }
+            else if (c.ShowFlag == Visibility.Visible)
+            {
+                c.ShowFlag = Visibility.Hidden;
+                c.ShowQuestion = Visibility.Visible;
+            }
+            else if (c.ShowQuestion == Visibility.Visible)
+            {
+                c.ShowQuestion = Visibility.Hidden;
+            }
+        }
+
         public int GetNumCeldasSinAbrir()
         {
             int n = 0;
