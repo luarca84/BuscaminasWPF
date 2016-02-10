@@ -27,6 +27,7 @@
                                                       CommandParameter="{Binding}"></MouseBinding>
                                     </Button.InputBindings>
                                 </Button>
+                                <Image Source="Images/bomb.png" Visibility="{Binding ShowBomb}"></Image>
                             </Grid>
                         </Grid>
                 </DataTemplate>

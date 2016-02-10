@@ -27,9 +27,14 @@ namespace BuscaminasWPF
         private bool _canExecute;
         public void MyAction()
         {
+            NuevoJuego();
+        }
+
+        private void NuevoJuego()
+        {
             List<Celda> lstCeldas = new List<Celda>();
             for (int i = 0; i < NumDificultad; i++)
-                for (int j = 0; j < NumDificultad; j++) 
+                for (int j = 0; j < NumDificultad; j++)
                 {
                     Celda c = new Celda();
                     c.Row = i;
@@ -40,7 +45,7 @@ namespace BuscaminasWPF
                 }
 
             Random r = new Random();
-            for(int i=0; i< NumMinas; i++)
+            for (int i = 0; i < NumMinas; i++)
             {
                 int x = r.Next(0, lstCeldas.Count);
                 if (lstCeldas[x].Mina)
@@ -65,7 +70,9 @@ namespace BuscaminasWPF
             if (c.Mina)
             {
                 c.Text = "M";
+                c.ShowBomb = Visibility.Visible;
                 MessageBox.Show("Game Over");
+                NuevoJuego();
             }
             else
             {
@@ -75,7 +82,22 @@ namespace BuscaminasWPF
                 {
                     DespejarCeldasAlrededor(c.Row, c.Column);
                 }
+
+                if (GetNumCeldasSinAbrir() == NumMinas)
+                {
+                    MessageBox.Show("You Win");
+                    NuevoJuego();
+                }
             }
+        }
+
+        public int GetNumCeldasSinAbrir()
+        {
+            int n = 0;
+            for (int i = 0; i < Celdas.Count; i++)
+                if (Celdas[i].Text == string.Empty)
+                    n++;
+            return n;
         }
 
         private void DespejarCeldasAlrededor(int i, int j)
@@ -100,8 +122,6 @@ namespace BuscaminasWPF
             if (a >= 0 && a < numDificultad && b >= 0 && b < numDificultad && (GetCelda(a, b).Text == string.Empty))
             {
                 GetCelda(a, b).Text = n1.ToString();
-                //dgvMinas[a, b].Value = n1;
-                //dgvMinas[a, b] = new DataGridViewTextBoxCell();
 
                 if (n1 == 0)
                 {
@@ -191,56 +211,6 @@ namespace BuscaminasWPF
         }
     }
 
-    public class Celda : INotifyPropertyChanged
-    {
-        int row;
-        int column;
-        string text;
-        bool mina = false;
-
-        public string Text
-        {
-            get { return text; }
-            set { text = value;
-            RaisePropertyChanged("Text");
-            }
-        }
-        
-        public int Row
-        {
-            get { return row; }
-            set { row = value; }
-        }
-        
-        public int Column
-        {
-            get { return column; }
-            set { column = value; }
-        }
-
-        public bool Mina
-        {
-            get
-            {
-                return mina;
-            }
-
-            set
-            {
-                mina = value;
-            }
-        }
-
-        public event PropertyChangedEventHandler PropertyChanged;
-        public void RaisePropertyChanged(String propertyName)
-        {
-            PropertyChangedEventHandler temp = PropertyChanged;
-            if (temp != null)
-            {
-                temp(this, new PropertyChangedEventArgs(propertyName));
-            }
-        }
-    }
 
     public class CommandHandler : ICommand
     {
