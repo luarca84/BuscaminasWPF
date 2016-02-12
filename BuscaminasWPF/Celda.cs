@@ -4,6 +4,8 @@ using System.ComponentModel;
 using System.Linq;
 using System.Text;
 using System.Windows;
+using System.Windows.Controls;
+using System.Windows.Media;
 
 namespace BuscaminasWPF
 {
@@ -16,6 +18,7 @@ namespace BuscaminasWPF
         Visibility showBomb = Visibility.Hidden;
         Visibility showFlag = Visibility.Hidden;
         Visibility showQuestion = Visibility.Hidden;
+        
 
         public string Text
         {
@@ -93,6 +96,7 @@ namespace BuscaminasWPF
                 RaisePropertyChanged("ShowQuestion");
             }
         }
+
 
         public event PropertyChangedEventHandler PropertyChanged;
         public void RaisePropertyChanged(String propertyName)
