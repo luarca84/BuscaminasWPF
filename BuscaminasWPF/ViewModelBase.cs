@@ -12,50 +12,78 @@ namespace BuscaminasWPF
 {
     class ViewModelBase : INotifyPropertyChanged
     {
+        #region Attributes
+        int numMinas = 10;
+        int numDificultad = 10;
+        List<Celda> celdas;
+        #endregion
+
+        #region Constructor
+
         public ViewModelBase()
         {
-            _canExecute = true;
+            
         }
+        #endregion
+        
+        #region Properties
+
+        public int NumMinas
+        {
+            get { return numMinas; }
+            set
+            {
+                numMinas = value;
+                RaisePropertyChanged("NumMinas");
+            }
+        }
+       
+
+        public int NumDificultad
+        {
+            get { return numDificultad; }
+            set
+            {
+                numDificultad = value;
+                RaisePropertyChanged("NumDificultad");
+            }
+        }
+               
+
+        public List<Celda> Celdas
+        {
+            get { return celdas; }
+            set
+            {
+                celdas = value;
+                RaisePropertyChanged("Celdas");
+            }
+        }
+        #endregion
+
+        #region ClickCommand
+
         private ICommand _clickCommand;
         public ICommand ClickCommand
         {
             get
             {
-                return _clickCommand ?? (_clickCommand = new CommandHandler(() => MyAction(), _canExecute));
+                return _clickCommand ?? (_clickCommand = new CommandHandler(() => MyAction(), CanExecuteAction()));
             }
         }
-        private bool _canExecute;
+
+        private bool CanExecuteAction()
+        {
+            return true;
+        }
+
         public void MyAction()
         {
             NuevoJuego();
         }
+        #endregion
 
-        private void NuevoJuego()
-        {
-            List<Celda> lstCeldas = new List<Celda>();
-            for (int i = 0; i < NumDificultad; i++)
-                for (int j = 0; j < NumDificultad; j++)
-                {
-                    Celda c = new Celda();
-                    c.Row = i;
-                    c.Column = j;
-                    c.Text = "";
-                    c.Mina = false;
-                    lstCeldas.Add(c);
-                }
-
-            Random r = new Random();
-            for (int i = 0; i < NumMinas; i++)
-            {
-                int x = r.Next(0, lstCeldas.Count);
-                if (lstCeldas[x].Mina)
-                    i--;
-                lstCeldas[x].Mina = true;
-            }
-
-            Celdas = lstCeldas;
-        }
-
+        #region LeftClickCommand
         private ICommand _leftClickCommand;
         public ICommand LeftClickCommand
         {
@@ -90,7 +118,9 @@ namespace BuscaminasWPF
                 }
             }
         }
+        #endregion
 
+        #region RightClickCommand
         private ICommand _rightClickCommand;
         public ICommand RightClickCommand
         {
@@ -116,6 +146,35 @@ namespace BuscaminasWPF
                 c.ShowQuestion = Visibility.Hidden;
             }
         }
+        #endregion
+
+        #region Methods
+        private void NuevoJuego()
+        {
+            List<Celda> lstCeldas = new List<Celda>();
+            for (int i = 0; i < NumDificultad; i++)
+                for (int j = 0; j < NumDificultad; j++)
+                {
+                    Celda c = new Celda();
+                    c.Row = i;
+                    c.Column = j;
+                    c.Text = "";
+                    c.Mina = false;
+                    lstCeldas.Add(c);
+                }
+
+            Random r = new Random();
+            for (int i = 0; i < NumMinas; i++)
+            {
+                int x = r.Next(0, lstCeldas.Count);
+                if (lstCeldas[x].Mina)
+                    i--;
+                lstCeldas[x].Mina = true;
+            }
+
+            Celdas = lstCeldas;
+        }
+               
 
         public int GetNumCeldasSinAbrir()
         {
@@ -193,38 +252,8 @@ namespace BuscaminasWPF
         {
             return celdas.Where(e => e.Row == row && e.Column == column).First();
         }
-
-
-        int numMinas = 10;
-
-        public int NumMinas
-        {
-            get { return numMinas; }
-            set { numMinas = value;
-            RaisePropertyChanged("NumMinas");
-            }
-        }
-        int numDificultad = 10;
-
-        public int NumDificultad
-        {
-            get { return numDificultad; }
-            set { numDificultad = value;
-            RaisePropertyChanged("NumDificultad");
-            }
-        }
-
-        List<Celda> celdas;
-
-        public List<Celda> Celdas
-        {
-            get { return celdas; }
-            set { celdas = value;
-            RaisePropertyChanged("Celdas");
-            }
-        }
-
-        
+        #endregion
+              
 
         public event PropertyChangedEventHandler PropertyChanged;
         public void RaisePropertyChanged(String propertyName)
